@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Configuración de QR Dinámico</title>
+  <title>QR Dinámico</title>
   
-  <!-- Inter font for a modern and clean look -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -28,11 +27,7 @@
       --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Inter', sans-serif;
@@ -58,7 +53,10 @@
       overflow: hidden;
     }
 
-    /* Subtle top accent line */
+    .container.wide {
+      max-width: 600px;
+    }
+
     .container::before {
       content: '';
       position: absolute;
@@ -81,10 +79,7 @@
       margin: 0 auto 1.5rem;
     }
 
-    .icon-wrapper svg {
-      width: 32px;
-      height: 32px;
-    }
+    .icon-wrapper svg { width: 32px; height: 32px; }
 
     h1 {
       font-size: 1.5rem;
@@ -102,7 +97,7 @@
 
     .form-group {
       text-align: left;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     label {
@@ -113,7 +108,7 @@
       color: var(--text-main);
     }
 
-    input[type="url"] {
+    input[type="url"], input[type="text"], input[type="number"], input[type="password"] {
       width: 100%;
       padding: 0.875rem 1rem;
       font-size: 1rem;
@@ -125,15 +120,11 @@
       color: var(--text-main);
     }
 
-    input[type="url"]:focus {
+    input:focus {
       outline: none;
       border-color: var(--accent);
       background-color: #FFFFFF;
       box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-    }
-
-    input[type="url"]::placeholder {
-      color: #94A3B8;
     }
 
     button {
@@ -152,22 +143,12 @@
       justify-content: center;
       align-items: center;
       gap: 0.5rem;
+      margin-top: 1rem;
     }
 
-    button:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-1px);
-    }
-
-    button:active {
-      transform: translateY(0);
-    }
-
-    button:disabled {
-      background-color: #94A3B8;
-      cursor: not-allowed;
-      transform: none;
-    }
+    button:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
+    button:active { transform: translateY(0); }
+    button:disabled { background-color: #94A3B8; cursor: not-allowed; transform: none; }
 
     /* Loader */
     .loader {
@@ -179,17 +160,9 @@
       border-top-color: white;
       animation: spin 0.8s ease-in-out infinite;
     }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    button.loading .loader {
-      display: block;
-    }
-    button.loading span {
-      display: none;
-    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    button.loading .loader { display: block; }
+    button.loading span { display: none; }
 
     /* Message box */
     .message-box {
@@ -202,59 +175,63 @@
       opacity: 0;
       transform: translateY(10px);
       transition: all 0.3s ease;
+      text-align: center;
     }
 
-    .message-box.show {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .message-box.show { display: block; opacity: 1; transform: translateY(0); }
+    .message-box.success { background-color: #ECFDF5; color: #065F46; border: 1px solid #A7F3D0; }
+    .message-box.error { background-color: #FEF2F2; color: #991B1B; border: 1px solid #FECACA; }
 
-    .message-box.success {
-      background-color: #ECFDF5;
-      color: #065F46;
-      border: 1px solid #A7F3D0;
-    }
-
-    .message-box.error {
-      background-color: #FEF2F2;
-      color: #991B1B;
-      border: 1px solid #FECACA;
-    }
-
-    .fade-out {
-      animation: fadeOut 0.5s ease forwards;
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; transform: scale(1); }
-      to { opacity: 0; transform: scale(0.95); display: none; }
-    }
-
-    .success-state {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      animation: fadeIn 0.5s ease forwards;
-    }
-
-    .success-state .icon-wrapper {
-      background-color: #ECFDF5;
-      color: var(--success);
-    }
+    .view-section { display: none; }
+    .view-section.active { display: block; animation: fadeIn 0.4s ease forwards; }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Links List Area */
+    .links-list {
+      margin-top: 2rem;
+      text-align: left;
+      display: none;
+    }
+    .links-list.show { display: block; }
+    
+    .link-item {
+      background-color: #F8FAFC;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .link-item button {
+      width: auto;
+      margin: 0;
+      padding: 0.4rem 0.8rem;
+      font-size: 0.75rem;
+      background-color: #E2E8F0;
+      color: var(--text-main);
+    }
+    .link-item button:hover {
+      background-color: #CBD5E1;
+    }
+
   </style>
 </head>
 <body>
 
   <div class="container" id="main-container">
     
-    <!-- Configuración inicial -->
-    <div id="setup-form-view">
+    <!-- 1. VISTA DE CONFIGURACIÓN DE QR -->
+    <div id="setup-view" class="view-section">
       <div class="icon-wrapper">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
@@ -270,18 +247,54 @@
           <input type="url" id="urlInput" placeholder="https://www.ejemplo.com" required autocomplete="off">
         </div>
         
-        <button type="submit" id="submitBtn">
+        <button type="submit" id="setupSubmitBtn">
           <span>Guardar Enlace</span>
           <div class="loader"></div>
         </button>
       </form>
-
-      <div id="messageBox" class="message-box"></div>
     </div>
 
-    <!-- Estado de Éxito (Oculto inicialmente) -->
-    <div id="success-view" class="success-state">
+    <!-- 2. VISTA DE ADMINISTRADOR (Generador) -->
+    <div id="admin-view" class="view-section">
       <div class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+      </div>
+      
+      <h1>Generador de Packs</h1>
+      <p>Crea lotes de QRs dinámicos listos para imprimir.</p>
+      
+      <form id="adminForm">
+        <div class="form-group">
+          <label for="prefixInput">Prefijo</label>
+          <input type="text" id="prefixInput" placeholder="Ej: PACK1" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="countInput">Cantidad</label>
+          <input type="number" id="countInput" placeholder="Ej: 10" min="1" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="passwordInput">Contraseña Maestra</label>
+          <input type="password" id="passwordInput" placeholder="Contraseña Maestra" required>
+        </div>
+        
+        <button type="submit" id="adminSubmitBtn">
+          <span>Generar QRs</span>
+          <div class="loader"></div>
+        </button>
+      </form>
+
+      <!-- Lista de URLs generadas -->
+      <div id="generated-links" class="links-list">
+        <label>Enlaces Generados (Listos para copiar)</label>
+        <div id="links-container"></div>
+      </div>
+    </div>
+
+    <!-- 3. ESTADO DE ÉXITO (Para el setup) -->
+    <div id="success-view" class="view-section">
+      <div class="icon-wrapper" style="background-color: #ECFDF5; color: var(--success);">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
@@ -290,88 +303,159 @@
       <p>Este código QR ahora redirigirá automáticamente a tu enlace. Los cambios ya están activos.</p>
     </div>
 
+    <!-- MENSAJES GLOBALES -->
+    <div id="messageBox" class="message-box"></div>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('setupForm');
-      const urlInput = document.getElementById('urlInput');
-      const submitBtn = document.getElementById('submitBtn');
-      const messageBox = document.getElementById('messageBox');
-      const setupFormView = document.getElementById('setup-form-view');
-      const successView = document.getElementById('success-view');
-
-      // Extraer el ID del QR desde la URL actual
-      // Asumiendo que la ruta es /qr/ID_AQUI
-      const pathParts = window.location.pathname.split('/');
-      // Buscamos el ID asumiendo la ruta /qr/ID
-      let qrId = pathParts[pathParts.length - 1];
       
-      // Fallback si no está en la ruta esperada para propósitos de prueba
-      if (!qrId || qrId === 'qr' || qrId === '') {
-        const urlParams = new URLSearchParams(window.location.search);
-        qrId = urlParams.get('id') || 'test-id';
+      // Elementos de la UI
+      const mainContainer = document.getElementById('main-container');
+      const setupView = document.getElementById('setup-view');
+      const adminView = document.getElementById('admin-view');
+      const successView = document.getElementById('success-view');
+      const messageBox = document.getElementById('messageBox');
+      
+      // Lógica de ruteo SPA
+      const path = window.location.pathname;
+      let qrId = null;
+
+      if (path.startsWith('/qr/')) {
+        // Modo Configuración
+        setupView.classList.add('active');
+        const parts = path.split('/');
+        qrId = parts[parts.length - 1];
+        if(!qrId) qrId = 'test-id';
+      } else {
+        // Modo Admin (Raíz)
+        adminView.classList.add('active');
+        mainContainer.classList.add('wide'); // Hacemos el modal un poco más ancho para la lista
       }
 
+      // Utilidad para mostrar mensajes
       function showMessage(msg, type) {
         messageBox.textContent = msg;
         messageBox.className = `message-box ${type} show`;
-        
         if(type === 'error') {
-          setTimeout(() => {
-            messageBox.classList.remove('show');
-          }, 4000);
+          setTimeout(() => messageBox.classList.remove('show'), 4000);
         }
       }
 
-      form.addEventListener('submit', async (e) => {
+      // ----------------------------------------------------
+      // Lógica: Vista de Configuración (Setup)
+      // ----------------------------------------------------
+      const setupForm = document.getElementById('setupForm');
+      const setupSubmitBtn = document.getElementById('setupSubmitBtn');
+
+      setupForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        const targetUrl = urlInput.value.trim();
-        
+        const targetUrl = document.getElementById('urlInput').value.trim();
         if (!targetUrl) return;
 
-        // Validar formato http/https
         if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
           showMessage('La URL debe comenzar con http:// o https://', 'error');
           return;
         }
 
-        // Estado de carga
-        submitBtn.disabled = true;
-        submitBtn.classList.add('loading');
+        setupSubmitBtn.disabled = true;
+        setupSubmitBtn.classList.add('loading');
         messageBox.classList.remove('show');
 
         try {
           const response = await fetch('/api/qr/setup', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ qrId, targetUrl })
           });
-
           const data = await response.json();
 
           if (response.ok && data.success) {
-            // Animación de éxito
-            setupFormView.classList.add('fade-out');
-            
-            setTimeout(() => {
-              setupFormView.style.display = 'none';
-              successView.style.display = 'flex';
-            }, 500);
-
+            setupView.classList.remove('active');
+            successView.classList.add('active');
           } else {
-            showMessage(data.message || 'Ocurrió un error al configurar el QR.', 'error');
-            submitBtn.disabled = false;
-            submitBtn.classList.remove('loading');
+            showMessage(data.message || 'Error al configurar el QR.', 'error');
           }
         } catch (error) {
-          console.error('Fetch error:', error);
-          showMessage('Error de conexión. Inténtalo de nuevo.', 'error');
-          submitBtn.disabled = false;
-          submitBtn.classList.remove('loading');
+          showMessage('Error de conexión.', 'error');
+        } finally {
+          setupSubmitBtn.disabled = false;
+          setupSubmitBtn.classList.remove('loading');
+        }
+      });
+
+      // ----------------------------------------------------
+      // Lógica: Vista de Administrador (Generador)
+      // ----------------------------------------------------
+      const adminForm = document.getElementById('adminForm');
+      const adminSubmitBtn = document.getElementById('adminSubmitBtn');
+      const generatedLinksSection = document.getElementById('generated-links');
+      const linksContainer = document.getElementById('links-container');
+
+      adminForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const prefix = document.getElementById('prefixInput').value.trim();
+        const count = parseInt(document.getElementById('countInput').value, 10);
+        const password = document.getElementById('passwordInput').value;
+
+        if (!prefix || !count || !password) return;
+
+        adminSubmitBtn.disabled = true;
+        adminSubmitBtn.classList.add('loading');
+        messageBox.classList.remove('show');
+        generatedLinksSection.classList.remove('show');
+
+        try {
+          const response = await fetch('/api/admin/generate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prefix, count, password })
+          });
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+            showMessage('QRs generados en la base de datos.', 'success');
+            
+            // Limpiar contenedor previo
+            linksContainer.innerHTML = '';
+            
+            // Dibujar lista
+            data.urls.forEach(url => {
+              const div = document.createElement('div');
+              div.className = 'link-item';
+              
+              const span = document.createElement('span');
+              span.textContent = url;
+              
+              const copyBtn = document.createElement('button');
+              copyBtn.type = 'button';
+              copyBtn.textContent = 'Copiar';
+              copyBtn.onclick = () => {
+                navigator.clipboard.writeText(url);
+                copyBtn.textContent = '¡Copiado!';
+                setTimeout(() => copyBtn.textContent = 'Copiar', 2000);
+              };
+
+              div.appendChild(span);
+              div.appendChild(copyBtn);
+              linksContainer.appendChild(div);
+            });
+
+            generatedLinksSection.classList.add('show');
+            document.getElementById('passwordInput').value = ''; // Limpiar contraseña por seguridad
+          } else {
+            // Manejo de Error 401 y otros
+            showMessage(data.message || 'Error al generar los QRs.', 'error');
+            if (response.status === 401) {
+              document.getElementById('passwordInput').focus();
+            }
+          }
+        } catch (error) {
+          showMessage('Error de conexión al servidor.', 'error');
+        } finally {
+          adminSubmitBtn.disabled = false;
+          adminSubmitBtn.classList.remove('loading');
         }
       });
     });
