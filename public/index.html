@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configuración de QR Dinámico</title>
+  
+  <!-- Inter font for a modern and clean look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #0F172A;
+      --primary-hover: #1E293B;
+      --accent: #3B82F6;
+      --accent-hover: #2563EB;
+      --bg-color: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+      --success: #10B981;
+      --error: #EF4444;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 420px;
+      background-color: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle top accent line */
+    .container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), #60A5FA);
+    }
+
+    .icon-wrapper {
+      width: 64px;
+      height: 64px;
+      background-color: #EFF6FF;
+      color: var(--accent);
+      border-radius: 16px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .icon-wrapper svg {
+      width: 32px;
+      height: 32px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-main);
+    }
+
+    input[type="url"] {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+      font-family: inherit;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background-color: #F8FAFC;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+
+    input[type="url"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      background-color: #FFFFFF;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    input[type="url"]::placeholder {
+      color: #94A3B8;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.875rem;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button:hover {
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background-color: #94A3B8;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Loader */
+    .loader {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 0.8s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    button.loading .loader {
+      display: block;
+    }
+    button.loading span {
+      display: none;
+    }
+
+    /* Message box */
+    .message-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: none;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.3s ease;
+    }
+
+    .message-box.show {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .message-box.success {
+      background-color: #ECFDF5;
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .message-box.error {
+      background-color: #FEF2F2;
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    .fade-out {
+      animation: fadeOut 0.5s ease forwards;
+    }
+
+    @keyframes fadeOut {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(0.95); display: none; }
+    }
+
+    .success-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    .success-state .icon-wrapper {
+      background-color: #ECFDF5;
+      color: var(--success);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container" id="main-container">
+    
+    <!-- Configuración inicial -->
+    <div id="setup-form-view">
+      <div class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+        </svg>
+      </div>
+      
+      <h1>Configurar Destino</h1>
+      <p>Asigna la URL a la que deseas que este código QR redirija cuando sea escaneado.</p>
+      
+      <form id="setupForm">
+        <div class="form-group">
+          <label for="urlInput">URL de Destino</label>
+          <input type="url" id="urlInput" placeholder="https://www.ejemplo.com" required autocomplete="off">
+        </div>
+        
+        <button type="submit" id="submitBtn">
+          <span>Guardar Enlace</span>
+          <div class="loader"></div>
+        </button>
+      </form>
+
+      <div id="messageBox" class="message-box"></div>
+    </div>
+
+    <!-- Estado de Éxito (Oculto inicialmente) -->
+    <div id="success-view" class="success-state">
+      <div class="icon-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+      </div>
+      <h1>¡Listo!</h1>
+      <p>Este código QR ahora redirigirá automáticamente a tu enlace. Los cambios ya están activos.</p>
+    </div>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('setupForm');
+      const urlInput = document.getElementById('urlInput');
+      const submitBtn = document.getElementById('submitBtn');
+      const messageBox = document.getElementById('messageBox');
+      const setupFormView = document.getElementById('setup-form-view');
+      const successView = document.getElementById('success-view');
+
+      // Extraer el ID del QR desde la URL actual
+      // Asumiendo que la ruta es /qr/ID_AQUI
+      const pathParts = window.location.pathname.split('/');
+      // Buscamos el ID asumiendo la ruta /qr/ID
+      let qrId = pathParts[pathParts.length - 1];
+      
+      // Fallback si no está en la ruta esperada para propósitos de prueba
+      if (!qrId || qrId === 'qr' || qrId === '') {
+        const urlParams = new URLSearchParams(window.location.search);
+        qrId = urlParams.get('id') || 'test-id';
+      }
+
+      function showMessage(msg, type) {
+        messageBox.textContent = msg;
+        messageBox.className = `message-box ${type} show`;
+        
+        if(type === 'error') {
+          setTimeout(() => {
+            messageBox.classList.remove('show');
+          }, 4000);
+        }
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const targetUrl = urlInput.value.trim();
+        
+        if (!targetUrl) return;
+
+        // Validar formato http/https
+        if (!targetUrl.startsWith('http://') && !targetUrl.startsWith('https://')) {
+          showMessage('La URL debe comenzar con http:// o https://', 'error');
+          return;
+        }
+
+        // Estado de carga
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading');
+        messageBox.classList.remove('show');
+
+        try {
+          const response = await fetch('/api/qr/setup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ qrId, targetUrl })
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.success) {
+            // Animación de éxito
+            setupFormView.classList.add('fade-out');
+            
+            setTimeout(() => {
+              setupFormView.style.display = 'none';
+              successView.style.display = 'flex';
+            }, 500);
+
+          } else {
+            showMessage(data.message || 'Ocurrió un error al configurar el QR.', 'error');
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading');
+          }
+        } catch (error) {
+          console.error('Fetch error:', error);
+          showMessage('Error de conexión. Inténtalo de nuevo.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('loading');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
